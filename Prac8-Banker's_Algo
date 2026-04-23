@@ -1,0 +1,63 @@
+# Banker's Algorithm
+
+def bankers():
+    n = int(input("Enter number of processes: "))
+    m = int(input("Enter number of resource types: "))
+
+    print("\nEnter Allocation Matrix:")
+    allocation = [list(map(int, input().split())) for _ in range(n)]
+
+    print("\nEnter Max Matrix:")
+    max_matrix = [list(map(int, input().split())) for _ in range(n)]
+
+    print("\nEnter Available Resources:")
+    available = list(map(int, input().split()))
+
+    # Calculate Need Matrix
+    need = [[0]*m for _ in range(n)]
+    for i in range(n):
+        for j in range(m):
+            need[i][j] = max_matrix[i][j] - allocation[i][j]
+
+    finish = [False]*n
+    safe_sequence = []
+    work = available.copy()
+
+    while len(safe_sequence) < n:
+        found = False
+        for i in range(n):
+            if not finish[i]:
+                if all(need[i][j] <= work[j] for j in range(m)):
+                    # Allocate
+                    for j in range(m):
+                        work[j] += allocation[i][j]
+                    safe_sequence.append(i)
+                    finish[i] = True
+                    found = True
+
+        if not found:
+            print("\nSystem is NOT in safe state (Deadlock possible)")
+            return
+
+    print("\nSystem is in SAFE state")
+    print("Safe Sequence:", " -> ".join([f"P{i}" for i in safe_sequence]))
+
+
+bankers()
+
+#Output
+Enter number of processes: 3
+Enter number of resource types: 3
+
+Enter Allocation Matrix:
+0 1 0
+2 0 0
+3 0 2
+
+Enter Max Matrix:
+7 5 3
+3 2 2
+9 0 2
+
+Enter Available Resources:
+3 3 2
