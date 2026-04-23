@@ -1,0 +1,51 @@
+import threading
+import time
+
+N = 5
+chopsticks = [threading.Semaphore(1) for _ in range(N)]
+
+def philosopher(i):
+    while True:
+        print(f"Philosopher {i} is Thinking")
+        time.sleep(1)
+
+        print(f"Philosopher {i} is Hungry")
+
+        # Pick left and right
+        chopsticks[i].acquire()
+        chopsticks[(i+1) % N].acquire()
+
+        print(f"Philosopher {i} is Eating")
+        time.sleep(1)
+
+        # Release
+        chopsticks[i].release()
+        chopsticks[(i+1) % N].release()
+
+
+#Output
+Philosopher 0 is Thinking
+Philosopher 1 is Thinking
+Philosopher 2 is Thinking
+Philosopher 3 is Thinking
+Philosopher 4 is Thinking
+
+Philosopher 0 is Hungry
+Philosopher 0 is Eating
+
+Philosopher 2 is Hungry
+Philosopher 2 is Eating
+
+Philosopher 1 is Hungry
+
+Philosopher 0 finished Eating and released chopsticks
+
+Philosopher 1 is Eating
+
+Philosopher 3 is Hungry
+Philosopher 3 is Eating
+
+Philosopher 2 finished Eating and released chopsticks
+
+Philosopher 4 is Hungry
+Philosopher 4 is Eating
