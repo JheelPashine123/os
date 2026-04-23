@@ -1,0 +1,61 @@
+# Round Robin Scheduling
+
+n = int(input("Enter number of processes: "))
+
+process = []
+arrival_time = []
+burst_time = []
+
+for i in range(n):
+    process.append(i+1)
+    at = int(input(f"Enter arrival time of P{i+1}: "))
+    bt = int(input(f"Enter burst time of P{i+1}: "))
+    arrival_time.append(at)
+    burst_time.append(bt)
+
+time_quantum = int(input("Enter Time Quantum: "))
+
+remaining_bt = burst_time[:]
+completion_time = [0]*n
+
+time = 0
+queue = []
+visited = [False]*n
+
+while True:
+    done = True
+
+    for i in range(n):
+        if remaining_bt[i] > 0:
+            done = False
+
+            if remaining_bt[i] > time_quantum:
+                time += time_quantum
+                remaining_bt[i] -= time_quantum
+            else:
+                time += remaining_bt[i]
+                completion_time[i] = time
+                remaining_bt[i] = 0
+
+    if done:
+        break
+
+# Calculate TAT and WT
+tat = [0]*n
+wt = [0]*n
+
+for i in range(n):
+    tat[i] = completion_time[i] - arrival_time[i]
+    wt[i] = tat[i] - burst_time[i]
+
+# Averages
+avg_tat = sum(tat)/n
+avg_wt = sum(wt)/n
+
+# Output
+print("\nProcess\tAT\tBT\tCT\tTAT\tWT")
+for i in range(n):
+    print(f"P{i+1}\t\t{arrival_time[i]}\t{burst_time[i]}\t{completion_time[i]}\t{tat[i]}\t{wt[i]}")
+
+print("\nAverage Turnaround Time =", avg_tat)
+print("Average Waiting Time =", avg_wt)
