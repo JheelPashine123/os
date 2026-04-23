@@ -1,3 +1,45 @@
+FCFS (First Come First Serve) – Disk Scheduling
+
+Definition
+FCFS is a disk scheduling algorithm.
+Requests are serviced in the order in which they arrive.
+It follows the FIFO (First-In-First-Out) principle.
+
+Characteristics 
+Simple and easy to implement: No complex logic is required.
+Processes requests in arrival order: No reordering of disk requests.
+No starvation: Every request gets a chance to execute.
+High seek time: Disk head may move long distances unnecessarily.
+Poor performance: Not efficient for systems with many requests.
+
+Working Principle 
+Disk requests are stored in a queue.
+Head starts from initial position.
+Requests are serviced one by one in order.
+Head moves sequentially to each request.
+Total seek time is calculated.
+
+SSTF (Shortest Seek Time First)
+
+Definition
+SSTF is a disk scheduling algorithm.
+It selects the request that is closest to the current head position.
+It minimizes seek time.
+
+Characteristics 
+Selects nearest request: Chooses the request with minimum head movement.
+Improved performance: Reduces total seek time compared to FCFS.
+May cause starvation: Requests far from head may never be serviced.
+Dynamic decision making: Depends on current head position.
+More efficient than FCFS: Better average seek time.
+
+Working Principle 
+Start from initial head position.
+Find the closest request to current position.
+Move head to that request.
+Remove it from queue.
+Repeat until all requests are served.
+--------------------------------------------------------------------------------
 # FCFS Disk Scheduling
 
 def fcfs(requests, head):
