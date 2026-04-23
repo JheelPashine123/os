@@ -1,0 +1,150 @@
+# FIFO Page Replacement
+
+def fifo(pages, frames):
+    memory = []
+    page_faults = 0
+
+    print("\nPage\tFrames")
+
+    for page in pages:
+        if page not in memory:
+            if len(memory) < frames:
+                memory.append(page)
+            else:
+                memory.pop(0)
+                memory.append(page)
+            page_faults += 1
+
+        print(f"{page}\t{memory}")
+
+    print("\nTotal Page Faults:", page_faults)
+
+
+# User Input
+pages = list(map(int, input("Enter page reference string: ").split()))
+frames = int(input("Enter number of frames: "))
+
+fifo(pages, frames)
+
+#Output
+Enter page reference string: 1 2 3 1 4 5
+Enter number of frames: 3
+Page    Frames
+1       [1]
+2       [1, 2]
+3       [1, 2, 3]
+1       [1, 2, 3]
+4       [2, 3, 4]
+5       [3, 4, 5]
+
+Total Page Faults: 5
+
+----------------------------------------------
+
+# LRU Page Replacement
+
+def lru(pages, frames):
+    memory = []
+    page_faults = 0
+
+    print("\nPage\tFrames")
+
+    for i in range(len(pages)):
+        if pages[i] not in memory:
+            if len(memory) < frames:
+                memory.append(pages[i])
+            else:
+                # Find least recently used
+                lru_index = 0
+                least_used = float('inf')
+
+                for j in range(len(memory)):
+                    if memory[j] in pages[:i]:
+                        last_used = max(k for k in range(i) if pages[k] == memory[j])
+                        if last_used < least_used:
+                            least_used = last_used
+                            lru_index = j
+
+                memory[lru_index] = pages[i]
+
+            page_faults += 1
+
+        print(f"{pages[i]}\t{memory}")
+
+    print("\nTotal Page Faults:", page_faults)
+
+
+# User Input
+pages = list(map(int, input("Enter page reference string: ").split()))
+frames = int(input("Enter number of frames: "))
+
+lru(pages, frames)
+
+#Output
+Enter page reference string: 1 2 3 1 4 5
+Enter number of frames: 3
+Page    Frames
+1       [1]
+2       [1, 2]
+3       [1, 2, 3]
+1       [1, 2, 3]
+4       [1, 4, 3]
+5       [1, 4, 5]
+
+Total Page Faults: 5
+
+----------------------------------------------------
+# Optimal Page Replacement
+
+def optimal(pages, frames):
+    memory = []
+    page_faults = 0
+
+    print("\nPage\tFrames")
+
+    for i in range(len(pages)):
+        if pages[i] not in memory:
+            if len(memory) < frames:
+                memory.append(pages[i])
+            else:
+                future = pages[i+1:]
+                index_to_replace = -1
+                farthest = -1
+
+                for j in range(len(memory)):
+                    if memory[j] not in future:
+                        index_to_replace = j
+                        break
+                    else:
+                        next_use = future.index(memory[j])
+                        if next_use > farthest:
+                            farthest = next_use
+                            index_to_replace = j
+
+                memory[index_to_replace] = pages[i]
+
+            page_faults += 1
+
+        print(f"{pages[i]}\t{memory}")
+
+    print("\nTotal Page Faults:", page_faults)
+
+
+# User Input
+pages = list(map(int, input("Enter page reference string: ").split()))
+frames = int(input("Enter number of frames: "))
+
+optimal(pages, frames)
+
+#Output
+Enter page reference string: 1 2 3 1 4 5
+Enter number of frames: 3
+Page    Frames
+1       [1]
+2       [1, 2]
+3       [1, 2, 3]
+1       [1, 2, 3]
+4       [1, 4, 3]
+5       [1, 5, 3]
+
+Total Page Faults: 5
