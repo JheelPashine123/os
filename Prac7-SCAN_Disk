@@ -1,0 +1,85 @@
+# SCAN Disk Scheduling
+
+def scan(requests, head, disk_size, direction):
+    seek_sequence = []
+    total_seek_time = 0
+
+    left = []
+    right = []
+
+    # Divide requests
+    for req in requests:
+        if req < head:
+            left.append(req)
+        else:
+            right.append(req)
+
+    left.sort()
+    right.sort()
+
+    current = head
+
+    print("\nInitial Head Position:", head)
+    print("Seek Sequence:")
+
+    if direction == "right":
+        # Move right
+        for req in right:
+            movement = abs(req - current)
+            print(f"{current} -> {req} (Movement = {movement})")
+            total_seek_time += movement
+            current = req
+
+        # Go to end
+        movement = abs((disk_size - 1) - current)
+        print(f"{current} -> {disk_size - 1} (Movement = {movement})")
+        total_seek_time += movement
+        current = disk_size - 1
+
+        # Reverse direction
+        for req in reversed(left):
+            movement = abs(req - current)
+            print(f"{current} -> {req} (Movement = {movement})")
+            total_seek_time += movement
+            current = req
+
+    elif direction == "left":
+        # Move left
+        for req in reversed(left):
+            movement = abs(req - current)
+            print(f"{current} -> {req} (Movement = {movement})")
+            total_seek_time += movement
+            current = req
+
+        # Go to start
+        movement = abs(current - 0)
+        print(f"{current} -> 0 (Movement = {movement})")
+        total_seek_time += movement
+        current = 0
+
+        # Reverse direction
+        for req in right:
+            movement = abs(req - current)
+            print(f"{current} -> {req} (Movement = {movement})")
+            total_seek_time += movement
+            current = req
+
+    print("\nTotal Seek Time:", total_seek_time)
+
+
+# User Input
+n = int(input("Enter number of requests: "))
+requests = list(map(int, input("Enter disk requests: ").split()))
+head = int(input("Enter initial head position: "))
+disk_size = int(input("Enter disk size: "))
+direction = input("Enter direction (left/right): ").lower()
+
+scan(requests, head, disk_size, direction)
+
+
+#Output
+Enter number of requests: 8
+Enter disk requests: 98 183 37 122 14 124 65 67
+Enter initial head position: 53
+Enter disk size: 200
+Enter direction (left/right): right
