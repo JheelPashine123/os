@@ -1,0 +1,84 @@
+# FCFS Disk Scheduling
+
+def fcfs(requests, head):
+    total_seek_time = 0
+    current = head
+
+    print("\nInitial Head Position:", head)
+    print("Seek Sequence:")
+
+    for req in requests:
+        movement = abs(req - current)
+        print(f"{current} -> {req}  (Movement = {movement})")
+        total_seek_time += movement
+        current = req
+
+    print("\nTotal Seek Time:", total_seek_time)
+
+
+# User Input
+n = int(input("Enter number of requests: "))
+requests = list(map(int, input("Enter disk requests: ").split()))
+head = int(input("Enter initial head position: "))
+
+fcfs(requests, head)
+
+#Output
+Enter number of requests: 4
+Enter disk requests: 22 45 66 21
+Enter initial head position: 33
+
+Initial Head Position: 33
+Seek Sequence:
+33 -> 22  (Movement = 11)
+22 -> 45  (Movement = 23)
+45 -> 66  (Movement = 21)
+66 -> 21  (Movement = 45)
+
+Total Seek Time: 100
+
+--------------------------------------------------
+
+# SSTF Disk Scheduling
+
+def sstf(requests, head):
+    total_seek_time = 0
+    current = head
+    reqs = requests.copy()
+
+    print("\nInitial Head Position:", head)
+    print("Seek Sequence:")
+
+    while reqs:
+        closest = min(reqs, key=lambda x: abs(x - current))
+        movement = abs(closest - current)
+
+        print(f"{current} -> {closest}  (Movement = {movement})")
+
+        total_seek_time += movement
+        current = closest
+        reqs.remove(closest)
+
+    print("\nTotal Seek Time:", total_seek_time)
+
+
+# User Input
+n = int(input("Enter number of requests: "))
+requests = list(map(int, input("Enter disk requests: ").split()))
+head = int(input("Enter initial head position: "))
+
+sstf(requests, head)
+
+# Output
+Enter number of requests: 4
+Enter disk requests: 34 55 63 77
+Enter initial head position: 44
+
+Initial Head Position: 44
+Seek Sequence:
+44 -> 34  (Movement = 10)
+34 -> 55  (Movement = 21)
+55 -> 63  (Movement = 8)
+63 -> 77  (Movement = 14)
+
+Total Seek Time: 53
